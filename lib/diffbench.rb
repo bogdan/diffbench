@@ -31,9 +31,12 @@ class DiffBench
         puts "Checkout HEAD^"
         git_run "checkout 'HEAD^'"
         puts "Running benchmark with HEAD^"
-        second_run = run_file
-        puts "Checkout to previous HEAD again"
-        git_run "checkout #{branch}"
+        begin
+          second_run = run_file
+        ensure
+          puts "Checkout to previous HEAD again"
+          git_run "checkout #{branch}"
+        end
 
       end
       puts ""
