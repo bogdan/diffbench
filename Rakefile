@@ -15,11 +15,12 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "diffbench"
+  gem.executables = ['diffbench']
   gem.homepage = "http://github.com/bogdan/diffbench"
   gem.license = "MIT"
   gem.summary = %Q{Benchmark your before and after some changes made}
   gem.description = %Q{Diffbench is gem designed to benchmark the performance patches. It can run specified benchmark file before and after some changes made and show performance comparation result}
-  gem.email = "agresso@gmail.com --github-username bogdan"
+  gem.email = "agresso@gmail.com"
   gem.authors = ["Bogdan Gusiev"]
   # dependencies defined in Gemfile
 end
