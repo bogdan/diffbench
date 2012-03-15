@@ -25,9 +25,7 @@ class DiffBench
           puts "Applying stashed changes back"
           git_run "stash pop"
         end
-      else
-        branch = git.current_branch.to_s
-        raise Error, "No current branch. TODO: support this use case" if branch == "(no branch)"
+      elsif branch = current_head
         puts "Checkout HEAD^"
         git_run "checkout 'HEAD^'"
         puts "Running benchmark with HEAD^"
@@ -37,7 +35,8 @@ class DiffBench
           puts "Checkout to previous HEAD again"
           git_run "checkout #{branch}"
         end
-
+      else
+        raise Error, "No current branch."
       end
       puts ""
       caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
@@ -48,6 +47,16 @@ class DiffBench
         puts "Before patch: #{second_run[test].format}"
         puts ""
       end
+    end
+
+    def current_head
+      branch = git.current_branch.to_s 
+      return branch if !(branch == "(no branch)")
+      branch = git_run("symbolic-ref HEAD").gsub(/^refs\/head\//, "")
+      return branch unless branch.empty?
+    rescue Git::GitExecuteError
+      branch = git_run("rev-parse HEAD")[0..7]
+      return branch
     end
 
     def run_file
