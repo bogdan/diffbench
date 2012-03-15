@@ -19,9 +19,12 @@ class DiffBench
         puts "Stashing changes"
         git_run "stash"
         puts "Running benchmark with clean working tree"
-        second_run = run_file
-        puts "Applying stashed changes back"
-        git_run "stash pop"
+        begin
+          second_run = run_file
+        ensure
+          puts "Applying stashed changes back"
+          git_run "stash pop"
+        end
       else
         branch = git.current_branch.to_s
         raise Error, "No current branch. TODO: support this use case" if branch == "(no branch)"
