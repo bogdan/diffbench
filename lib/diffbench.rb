@@ -13,29 +13,52 @@ class DiffBench
     end
 
     def run
+      puts "Running benchmark with current working tree"
       first_run = run_file
-      git "stash"
-      second_run = run_file
-      git "stash pop"
+      if tree_dirty?
+        puts "Stashing changes"
+        git_run "stash"
+        puts "Running benchmark with clean working tree"
+        second_run = run_file
+        puts "Applying stashed changes back"
+        git_run "stash pop"
+      else
+        branch = git.current_branch.to_s
+        raise Error, "No current branch. TODO: support this use case" if branch == "(no branch)"
+        puts "Checkout HEAD^"
+        git_run "checkout 'HEAD^'"
+        puts "Running benchmark with HEAD^"
+        second_run = run_file
+        puts "Checkout to previous HEAD again"
+        git_run "checkout #{branch}"
+
+      end
+      puts ""
       first_run.keys.each do |test|
         puts "-"* 10 + test + "-" * 10
-        puts "New: #{first_run[test].format}"
-        puts "Old: #{second_run[test].format}"
+        puts "After patch: #{first_run[test].format}"
+        puts "Before patch: #{second_run[test].format}"
+        puts ""
       end
     end
 
     def run_file
       output = `ruby #{@file}`
       begin
-        YAML.load(output) 
+        result = YAML.load(output) 
+        raise Error, "Can not parse result of ruby script: \n #{output}" unless result
+        result
       rescue Psych::SyntaxError
         raise Error, "Can not run ruby script: \n#{output}"
       end
     end
 
-    def git(command)
-      @git ||= Git.open(discover_git_dir).lib
-      @git.send(:command, command)
+    def git_run(command)
+      git.lib.send(:command, command)
+    end
+
+    def git
+      @git ||= Git.open(discover_git_dir)
     end
 
     def discover_git_dir
@@ -48,6 +71,11 @@ class DiffBench
         tokens.pop
       end
       raise Error, "Git working dir not found"
+    end
+
+    def tree_dirty?
+      status = git.status
+      status.deleted.any? || status.changed.any? || status.added.any?
     end
   end
 
