@@ -37,9 +37,10 @@ class DiffBench
 
       end
       puts ""
-      puts "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
+      caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
+      puts caption
       first_run.keys.each do |test|
-        puts "-"* 10 + test + "-" * 10
+        puts ("-"* (caption.size - test.size)) + test
         puts "After patch:  #{first_run[test].format}"
         puts "Before patch: #{second_run[test].format}"
         puts ""
@@ -50,7 +51,7 @@ class DiffBench
       output = `ruby #{@file}`
       begin
         result = YAML.load(output) 
-        raise Error, "Can not parse result of ruby script: \n #{output}" unless result
+        raise Error, "Can not parse result of ruby script: \n #{output}" unless result.is_a?(Hash)
         result
       rescue Psych::SyntaxError
         raise Error, "Can not run ruby script: \n#{output}"
@@ -97,7 +98,12 @@ class DiffBench
   class Bm
     def initialize(&block)
       @measures = {}
-      instance_eval(&block)
+      if block.arity == -1 || block.arity > 0
+        block.call(self)
+      else
+        instance_eval(&block)
+      end
+
       puts @measures.to_yaml
     end
 
