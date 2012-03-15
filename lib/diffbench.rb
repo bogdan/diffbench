@@ -37,9 +37,10 @@ class DiffBench
 
       end
       puts ""
+      puts "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
       first_run.keys.each do |test|
         puts "-"* 10 + test + "-" * 10
-        puts "After patch: #{first_run[test].format}"
+        puts "After patch:  #{first_run[test].format}"
         puts "Before patch: #{second_run[test].format}"
         puts ""
       end
