@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "diffbench"
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Bogdan Gusiev"]
-  s.date = "2012-03-15"
+  s.date = "2012-03-16"
   s.description = "Diffbench is gem designed to benchmark the performance patches. It can run specified benchmark file before and after some changes made and show performance comparation result"
   s.email = "agresso@gmail.com"
   s.executables = ["diffbench"]
