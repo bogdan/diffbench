@@ -8,8 +8,7 @@ Diffbench is tool the I end up during many many performance patches to:
   * ActiveSupport - [#4493](https://github.com/rails/rails/pull/4493)
 * Mail - [#396](https://github.com/mikel/mail/pull/369)
 
-It runs a same benchmark code before and after applying a patch
-TODO links to original PRs
+It runs a same benchmark code before and after applying a patch.
 
 ## Installation
 
