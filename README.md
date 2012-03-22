@@ -3,10 +3,10 @@
 Diffbench is tool the I end up during many many performance patches to:
 
 * Rails
-  * ActiveRecord
-  * ActiveModel
-  * ActiveSupport
-* Mail
+  * ActiveRecord - [#5467](https://github.com/rails/rails/pull/5467)
+  * ActiveModel - [#5431](https://github.com/rails/rails/pull/5431)
+  * ActiveSupport - [#4493](https://github.com/rails/rails/pull/4493)
+* Mail - [#396](https://github.com/mikel/mail/pull/369)
 
 It runs a same benchmark code before and after applying a patch
 TODO links to original PRs
