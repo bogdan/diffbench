@@ -61,6 +61,9 @@ class DiffBench
 
     def run_file
       output = `ruby -I#{File.dirname(__FILE__)} #{@file}`
+      if $?.to_i > 0
+        raise Error, "Error exit code: #{$?.to_i}"
+      end
       begin
         result = YAML.load(output) 
         raise Error, "Can not parse result of ruby script: \n #{output}" unless result.is_a?(Hash)
