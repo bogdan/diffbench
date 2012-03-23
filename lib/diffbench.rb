@@ -60,7 +60,7 @@ class DiffBench
     end
 
     def run_file
-      output = `ruby #{@file}`
+      output = `ruby -I#{File.dirname(__FILE__)} #{@file}`
       begin
         result = YAML.load(output) 
         raise Error, "Can not parse result of ruby script: \n #{output}" unless result.is_a?(Hash)
