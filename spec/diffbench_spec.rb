@@ -18,15 +18,15 @@ describe DiffBench do
 
   describe "when git tree is dirty" do
     before do
-      content = File.read("spec/repo/code.rb")
-      File.open("spec/repo/code.rb", "w") do |f|
+      content = File.read("#{repo}/code.rb")
+      File.open("#{repo}/code.rb", "w") do |f|
         f.write(content.gsub(/TIME = 0\.2/, "TIME = 0.1"))
       end
-      FileUtils.cp("spec/bench.rb", "spec/repo/bench.rb")
+      FileUtils.cp("spec/bench.rb", "#{repo}/bench.rb")
     end
 
     it "should run benchmark with dirty tree and clean tree" do
-      puts `cd spec/repo; ./../../bin/diffbench bench.rb`
+      puts `cd #{repo}; ./../../bin/diffbench bench.rb`
     end
 
     describe "when changes got commit" do
@@ -37,7 +37,7 @@ describe DiffBench do
       end
 
       it "should run benchmark with HEAD and HEAD^" do
-        puts `cd spec/repo; ./../../bin/diffbench bench.rb`
+        puts `cd #{repo}; ./../../bin/diffbench bench.rb`
       end
     end
   end
