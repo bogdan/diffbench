@@ -31,10 +31,14 @@ DiffBench.bm do
     Mail::Header.new("X-Subscriber: 1111\n"* 1000)
   end
   report("headers parsing when tiny") do
-    Mail::Header.new("X-Subscriber: 1111\n"* 10)
+    10.times do
+      Mail::Header.new("X-Subscriber: 1111\n"* 10)
+    end
   end
   report("headers parsing when empty") do
-    Mail::Header.new("")
+    100.times do
+      Mail::Header.new("")
+    end
   end
 end
 ```
@@ -59,16 +63,16 @@ Checkout to previous HEAD again
 
                     user     system      total        real
 ----------------------------------headers parsing when long
-After patch:    0.100000   0.000000   0.100000 (  0.179808)
-Before patch:   0.680000   0.010000   0.690000 (  0.686527)
+After patch:    0.100000   0.000000   0.100000 (  0.089926)
+Before patch:   0.700000   0.000000   0.700000 (  0.697444)
 
 ----------------------------------headers parsing when tiny
-After patch:    0.000000   0.000000   0.000000 (  0.000851)
-Before patch:   0.000000   0.000000   0.000000 (  0.001323)
+After patch:    0.000000   0.000000   0.000000 (  0.009930)
+Before patch:   0.020000   0.000000   0.020000 (  0.024283)
 
 ---------------------------------headers parsing when empty
-After patch:    0.000000   0.000000   0.000000 (  0.000244)
-Before patch:   0.000000   0.000000   0.000000 (  0.000284)
+After patch:    0.010000   0.000000   0.010000 (  0.002160)
+Before patch:   0.000000   0.000000   0.000000 (  0.002354)
 ```
 
 
