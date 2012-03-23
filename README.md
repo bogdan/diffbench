@@ -49,4 +49,26 @@ If the working tree is dirty than diffbench will run benchmark against dirty and
 If the working tree is not dirty than diffbench will run benchmark against current HEAD and commit previous to HEAD.
 
 
+Output:
+
+```
+Running benchmark with current working tree
+Checkout HEAD^
+Running benchmark with HEAD^
+Checkout to previous HEAD again
+
+                    user     system      total        real
+----------------------------------headers parsing when long
+After patch:    0.100000   0.000000   0.100000 (  0.179808)
+Before patch:   0.680000   0.010000   0.690000 (  0.686527)
+
+----------------------------------headers parsing when tiny
+After patch:    0.000000   0.000000   0.000000 (  0.000851)
+Before patch:   0.000000   0.000000   0.000000 (  0.001323)
+
+---------------------------------headers parsing when empty
+After patch:    0.000000   0.000000   0.000000 (  0.000244)
+Before patch:   0.000000   0.000000   0.000000 (  0.000284)
+```
+
 
