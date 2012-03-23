@@ -10,7 +10,7 @@ describe DiffBench do
     FileUtils.mkdir(repo)
     git = Git.init(repo)
     FileUtils.cp("spec/code.rb", repo)
-    git.add(".")
+    git.add("code.rb")
     git.commit("Init")
     git
   end
@@ -27,6 +27,18 @@ describe DiffBench do
 
     it "should run benchmark with dirty tree and clean tree" do
       puts `cd spec/repo; ./../../bin/diffbench bench.rb`
+    end
+
+    describe "when changes got commit" do
+
+      before(:each) do
+        git.add("code.rb")
+        git.commit("Commit")
+      end
+
+      it "should run benchmark with HEAD and HEAD^" do
+        puts `cd spec/repo; ./../../bin/diffbench bench.rb`
+      end
     end
   end
 

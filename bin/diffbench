@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-if File.exists?(File.join(File.expand_path('..', __FILE__), '.git'))
-  diffbench_path = File.expand_path('../lib', __FILE__)
+if File.exists?(File.join(File.expand_path('../..', __FILE__), '.git'))
+  diffbench_path = File.expand_path('../../lib', __FILE__)
   $:.unshift(diffbench_path)
 end
 
