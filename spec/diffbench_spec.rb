@@ -10,6 +10,7 @@ describe DiffBench do
     FileUtils.mkdir(repo)
     git = Git.init(repo)
     FileUtils.cp("spec/code.rb", repo)
+    FileUtils.cp("spec/bench.rb", "#{repo}/bench.rb")
     git.add("code.rb")
     git.commit("Init")
     git
@@ -22,7 +23,6 @@ describe DiffBench do
       File.open("#{repo}/code.rb", "w") do |f|
         f.write(content.gsub(/TIME = 0\.2/, "TIME = 0.1"))
       end
-      FileUtils.cp("spec/bench.rb", "#{repo}/bench.rb")
     end
 
     it "should run benchmark with dirty tree and clean tree" do

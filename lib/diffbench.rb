@@ -62,6 +62,13 @@ class DiffBench
 
     def run_file
       output = `ruby -I#{File.dirname(__FILE__)} #{@file}`
+      output.split("\n").select do |line|
+        if line.start_with?("diffbench:")
+          true
+        else
+          puts line
+        end
+      end
       if $?.to_i > 0
         raise Error, "Error exit code: #{$?.to_i}"
       end
@@ -135,7 +142,7 @@ class DiffBench
   class Encoder
     class << self
       def encode(object)
-        "diffbench:#{Base64.encode64(object.to_yaml)}"
+        "diffbench:#{Base64.encode64(object.to_yaml).gsub!("\n", "")}"
       end
 
       def decode(string)
