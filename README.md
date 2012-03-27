@@ -76,3 +76,10 @@ Before patch:   0.000000   0.000000   0.000000 (  0.002354)
 ```
 
 
+## Self-Promotion
+
+Like ajaxsubmit?
+
+Follow the [repository on GitHub](https://github.com/bogdan/ajaxsubmit).
+
+Read [author blog](http://gusiev.com).
