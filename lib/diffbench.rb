@@ -62,7 +62,7 @@ class DiffBench
 
     def run_file
       output = `ruby -I#{File.dirname(__FILE__)} #{@file}`
-      output.split("\n").select do |line|
+      output.split("\n").select! do |line|
         if line.start_with?("diffbench:")
           true
         else
