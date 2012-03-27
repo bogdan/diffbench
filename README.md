@@ -10,6 +10,10 @@ Diffbench is a tool I end up during many performance patches to:
 
 It runs a same benchmark code before and after applying a patch.
 
+## Requirements
+
+* Git
+
 ## Installation
 
 ``` sh
