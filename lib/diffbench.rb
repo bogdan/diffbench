@@ -95,7 +95,7 @@ class DiffBench
 
     def tree_dirty?
       status = git.status
-      status.deleted.any? || status.changed.any? || status.added.any?
+      status.deleted.any? || status.changed.any?
     end
   end
 
