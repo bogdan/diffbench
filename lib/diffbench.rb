@@ -1,6 +1,7 @@
 require "yaml"
 require "benchmark"
 require "git"
+require "base64"
 
 class DiffBench
 
@@ -65,7 +66,7 @@ class DiffBench
         raise Error, "Error exit code: #{$?.to_i}"
       end
       begin
-        result = YAML.load(output) 
+        result = Encoder.decode(output) 
         raise Error, "Can not parse result of ruby script: \n #{output}" unless result.is_a?(Hash)
         result
       rescue Psych::SyntaxError
@@ -119,13 +120,26 @@ class DiffBench
         instance_eval(&block)
       end
 
-      puts @measures.to_yaml
+      print Encoder.encode(@measures)
     end
+
 
 
     def report(label)
       @measures[label] = Benchmark.measure do
         yield
+      end
+    end
+  end
+
+  class Encoder
+    class << self
+      def encode(object)
+        "diffbench:#{Base64.encode64(object.to_yaml)}"
+      end
+
+      def decode(string)
+        YAML.load(Base64.decode64(string.split(":").last))
       end
     end
   end
