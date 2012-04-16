@@ -2,6 +2,11 @@ require 'spec_helper'
 require "fileutils"
 
 describe DiffBench do
+
+  def to_regexp(output)
+    Regexp.compile(Regexp.escape(output).gsub("NUMBERS", "[0-9]+")) 
+  end
+
   let(:repo) do
     "#{File.dirname(__FILE__)}/repo"
   end
@@ -26,7 +31,26 @@ describe DiffBench do
     end
 
     it "should run benchmark with dirty tree and clean tree" do
-      puts `cd #{repo}; ./../../bin/diffbench bench.rb`
+      output =  `cd #{repo}; ./../../bin/diffbench bench.rb`
+      output.should =~ to_regexp(<<-OUT)
+Running benchmark with current working tree
+--> Sleeping
+--> Sleeping
+Stashing changes
+Running benchmark with clean working tree
+--> Sleeping
+--> Sleeping
+Applying stashed changes back
+
+                    user     system      total        real
+--------------------------------------------------Sleeper 1
+After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+
+--------------------------------------------------Sleeper 2
+After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+OUT
     end
 
     describe "when changes got commit" do
@@ -37,7 +61,25 @@ describe DiffBench do
       end
 
       it "should run benchmark with HEAD and HEAD^" do
-        puts `cd #{repo}; ./../../bin/diffbench bench.rb`
+        `cd #{repo}; ./../../bin/diffbench bench.rb`.should =~ to_regexp(<<-OUT)
+Running benchmark with current working tree
+--> Sleeping
+--> Sleeping
+Checkout HEAD^
+Running benchmark with HEAD^
+--> Sleeping
+--> Sleeping
+Checkout to previous HEAD again
+
+                    user     system      total        real
+--------------------------------------------------Sleeper 1
+After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+
+--------------------------------------------------Sleeper 2
+After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+OUT
       end
     end
   end
