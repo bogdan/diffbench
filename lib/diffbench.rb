@@ -14,41 +14,43 @@ class DiffBench
     end
 
     def run
-      puts "Running benchmark with current working tree"
+      output "Running benchmark with current working tree"
       first_run = run_file
       if tree_dirty?
-        puts "Stashing changes"
+        output "Stashing changes"
         git_run "stash"
-        puts "Running benchmark with clean working tree"
+        output "Running benchmark with clean working tree"
         begin
           second_run = run_file
         ensure
-          puts "Applying stashed changes back"
+          output "Applying stashed changes back"
           git_run "stash pop"
         end
       elsif branch = current_head
-        puts "Checkout HEAD^"
+        output "Checkout HEAD^"
         git_run "checkout 'HEAD^'"
-        puts "Running benchmark with HEAD^"
+        output "Running benchmark with HEAD^"
         begin
           second_run = run_file
         ensure
-          puts "Checkout to previous HEAD again"
+          output "Checkout to previous HEAD again"
           git_run "checkout #{branch}"
         end
       else
         raise Error, "No current branch."
       end
-      puts ""
+      output ""
       caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
-      puts caption
+      output caption
       first_run.keys.each do |test|
-        puts ("-"* (caption.size - test.size)) + test
-        puts "After patch:  #{first_run[test].format}"
-        puts "Before patch: #{second_run[test].format}"
-        puts ""
+        output ("-"* (caption.size - test.size)) + test
+        output "After patch:  #{first_run[test].format}"
+        output "Before patch: #{second_run[test].format}"
+        output ""
       end
     end
+
+    protected
 
     def current_head
       branch = git.current_branch.to_s 
@@ -66,7 +68,7 @@ class DiffBench
         if line.start_with?("diffbench:")
           true
         else
-          puts line
+          output line
         end
       end
       if $?.to_i > 0
@@ -104,6 +106,10 @@ class DiffBench
     def tree_dirty?
       status = git.status
       status.deleted.any? || status.changed.any?
+    end
+
+    def output(string)
+      puts string
     end
   end
 
