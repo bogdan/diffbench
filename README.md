@@ -6,6 +6,7 @@ Diffbench is a tool I end up during many performance patches to:
   * ActiveRecord - [#5467](https://github.com/rails/rails/pull/5467)
   * ActiveModel - [#5431](https://github.com/rails/rails/pull/5431)
   * ActiveSupport - [#4493](https://github.com/rails/rails/pull/4493)
+  * ActionPack - [#5957](https://github.com/rails/rails/pull/5957)
 * Mail - [#396](https://github.com/mikel/mail/pull/369), [#366](https://github.com/mikel/mail/pull/366)
 
 It runs a same benchmark code before and after applying a patch.
