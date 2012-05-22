@@ -2,10 +2,15 @@ require "yaml"
 require "benchmark"
 require "git"
 require "base64"
+require "rainbow"
+require "diffbench/encoder"
+require "diffbench/bm"
 
 class DiffBench
 
   class Runner
+    COLORS = {red: 31, green: 32}
+
     def initialize(file, *args)
       @file = file
       unless @file
@@ -44,13 +49,32 @@ class DiffBench
       output caption
       first_run.keys.each do |test|
         output ("-"* (caption.size - test.size)) + test
-        output "After patch:  #{first_run[test].format}"
-        output "Before patch: #{second_run[test].format}"
+        color_string = result_color(first_run[test], second_run[test])
+        output "After patch:  #{color(first_run[test].format, color_string)}".strip
+        output "Before patch: #{color(second_run[test].format, color_string)}".strip
         output ""
       end
     end
 
+    def color(text, color_string)
+      code = COLORS[color_string]
+      self.class.color_enabled? ? "\e[#{code}m#{text}\e[0m" : text
+    end
+    
+    def self.color_enabled?
+      defined?(@color_enabled) ? @color_enabled : true
+    end
+
     protected
+
+    def result_color(after_patch, before_patch)
+      improvement = (before_patch.real - after_patch.real).to_f / before_patch.real
+      if (-0.05..0.05).include?(improvement)
+        nil
+      else
+        improvement > 0 ? :green : :red
+      end
+    end
 
     def current_head
       branch = git.current_branch.to_s 
@@ -124,37 +148,6 @@ class DiffBench
 
   end
 
-  class Bm
-    def initialize(&block)
-      @measures = {}
-      if block.arity == -1 || block.arity > 0
-        block.call(self)
-      else
-        instance_eval(&block)
-      end
 
-      print Encoder.encode(@measures)
-    end
-
-
-
-    def report(label)
-      @measures[label] = Benchmark.measure do
-        yield
-      end
-    end
-  end
-
-  class Encoder
-    class << self
-      def encode(object)
-        "diffbench:#{Base64.encode64(object.to_yaml).gsub!("\n", "")}"
-      end
-
-      def decode(string)
-        YAML.load(Base64.decode64(string.split(":").last))
-      end
-    end
-  end
   class Error < StandardError; end
 end

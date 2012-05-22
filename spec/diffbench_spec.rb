@@ -7,6 +7,10 @@ describe DiffBench do
     Regexp.compile(Regexp.escape(output).gsub("NUMBERS", "[0-9]+")) 
   end
 
+  before(:each) do
+    DiffBench::Runner.color_enabled = false
+  end
+
   let(:repo) do
     "#{File.dirname(__FILE__)}/repo"
   end
