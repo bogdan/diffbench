@@ -2,7 +2,6 @@ require "yaml"
 require "benchmark"
 require "git"
 require "base64"
-require "rainbow"
 require "diffbench/encoder"
 require "diffbench/bm"
 
