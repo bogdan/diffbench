@@ -15,3 +15,4 @@ tmtags
 .redcar
 *.rbc
 spec/repo
+Gemfile.lock
