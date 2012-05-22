@@ -49,27 +49,36 @@ class DiffBench
       output caption
       first_run.keys.each do |test|
         output ("-"* (caption.size - test.size)) + test
-        color_string = result_color(first_run[test], second_run[test])
-        output "After patch:  #{color(first_run[test].format, color_string)}".strip
-        output "Before patch: #{color(second_run[test].format, color_string)}".strip
+        before_patch = second_run[test]
+        after_patch = first_run[test]
+        improvement = improvement_percentage(before_patch, after_patch)
+        color_string = result_color(improvement)
+        output "After patch:  #{after_patch.format}"
+        output "Before patch: #{before_patch.format}"
+        #if color_string
+          #output self.class.color("Improvement: #{improvement}%", color_string).strip
+        #end
         output ""
       end
     end
 
-    def color(text, color_string)
+    def improvement_percentage(before_patch, after_patch)
+      (((before_patch.real - after_patch.real).to_f / before_patch.real) * 100).round
+    end
+
+    def self.color(text, color_string)
       code = COLORS[color_string]
-      self.class.color_enabled? ? "\e[#{code}m#{text}\e[0m" : text
+      self.color_enabled? ? "\e[#{code}m#{text}\e[0m" : text
     end
     
     def self.color_enabled?
-      defined?(@color_enabled) ? @color_enabled : true
+      true
     end
 
     protected
 
-    def result_color(after_patch, before_patch)
-      improvement = (before_patch.real - after_patch.real).to_f / before_patch.real
-      if (-0.05..0.05).include?(improvement)
+    def result_color(improvement)
+      if (-5..5).include?(improvement)
         nil
       else
         improvement > 0 ? :green : :red

@@ -4,11 +4,7 @@ require "fileutils"
 describe DiffBench do
 
   def to_regexp(output)
-    Regexp.compile(Regexp.escape(output).gsub("NUMBERS", "[0-9]+")) 
-  end
-
-  before(:each) do
-    DiffBench::Runner.color_enabled = false
+    Regexp.compile(Regexp.escape(output).gsub("NUM", "[0-9]+")) 
   end
 
   let(:repo) do
@@ -48,12 +44,12 @@ Applying stashed changes back
 
                     user     system      total        real
 --------------------------------------------------Sleeper 1
-After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
 
 --------------------------------------------------Sleeper 2
-After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
 OUT
     end
 
@@ -65,7 +61,8 @@ OUT
       end
 
       it "should run benchmark with HEAD and HEAD^" do
-        `cd #{repo}; ./../../bin/diffbench bench.rb`.should =~ to_regexp(<<-OUT)
+        output = `cd #{repo}; ./../../bin/diffbench bench.rb`
+        output.should =~ to_regexp(<<-OUT)
 Running benchmark with current working tree
 --> Sleeping
 --> Sleeping
@@ -77,13 +74,17 @@ Checkout to previous HEAD again
 
                     user     system      total        real
 --------------------------------------------------Sleeper 1
-After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
 
 --------------------------------------------------Sleeper 2
-After patch:    0.000000   0.000000   0.000000 (  0.100NUMBERS)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUMBERS)
+After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
 OUT
+
+
+
+
       end
     end
   end
