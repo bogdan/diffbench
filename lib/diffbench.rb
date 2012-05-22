@@ -55,9 +55,9 @@ class DiffBench
         color_string = result_color(improvement)
         output "After patch:  #{after_patch.format}"
         output "Before patch: #{before_patch.format}"
-        #if color_string
-          #output self.class.color("Improvement: #{improvement}%", color_string).strip
-        #end
+        if color_string
+          output self.class.color("Improvement: #{improvement}%", color_string).strip
+        end
         output ""
       end
     end

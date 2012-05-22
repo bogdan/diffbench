@@ -46,10 +46,12 @@ Applying stashed changes back
 --------------------------------------------------Sleeper 1
 After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
 Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
+#{DiffBench::Runner.color("Improvement: 50%", :green)}
 
 --------------------------------------------------Sleeper 2
 After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
 Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
+#{DiffBench::Runner.color("Improvement: 50%", :green)}
 OUT
     end
 
@@ -76,15 +78,13 @@ Checkout to previous HEAD again
 --------------------------------------------------Sleeper 1
 After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
 Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
+#{DiffBench::Runner.color("Improvement: 50%", :green)}
 
 --------------------------------------------------Sleeper 2
 After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
 Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
+#{DiffBench::Runner.color("Improvement: 50%", :green)}
 OUT
-
-
-
-
       end
     end
   end
