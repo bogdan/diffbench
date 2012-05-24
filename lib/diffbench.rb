@@ -8,7 +8,7 @@ require "diffbench/bm"
 class DiffBench
 
   class Runner
-    COLORS = {red: 31, green: 32}
+    COLORS = {:red => 31, :green => 32, :yellow => 33}
 
     def initialize(file, *args)
       @file = file
@@ -54,9 +54,7 @@ class DiffBench
         color_string = result_color(improvement)
         output "After patch:  #{after_patch.format}"
         output "Before patch: #{before_patch.format}"
-        if color_string
-          output self.class.color("Improvement: #{improvement}%", color_string).strip
-        end
+        output self.class.color("Improvement: #{improvement}%", color_string).strip
         output ""
       end
     end
@@ -78,7 +76,7 @@ class DiffBench
 
     def result_color(improvement)
       if (-5..5).include?(improvement)
-        nil
+        :yellow
       else
         improvement > 0 ? :green : :red
       end
