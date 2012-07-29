@@ -79,6 +79,10 @@ Before patch:   0.020000   0.000000   0.020000 (  0.024283)
 After patch:    0.010000   0.000000   0.010000 (  0.002160)
 Before patch:   0.000000   0.000000   0.000000 (  0.002354)
 ```
+## Is DiffBench safe for my repo?
+
+DiffBench is using `git stash` and `git checkout "HEAD^"` commands to modify code in a repo.
+This means that you are able to **recover** your code even **after ruby segfaults**.
 
 
 ## Self-Promotion
