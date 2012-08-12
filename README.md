@@ -1,6 +1,6 @@
 # Diffbench
 
-Diffbench is a tool I end up during many performance patches to:
+Diffbench is a tool I made during many performance patches to:
 
 * Rails
   * ActiveRecord - [#5467](https://github.com/rails/rails/pull/5467)
