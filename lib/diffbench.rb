@@ -2,6 +2,7 @@ require "yaml"
 require "benchmark"
 require "git"
 require "base64"
+require "optparse"
 require "diffbench/encoder"
 require "diffbench/bm"
 
@@ -10,14 +11,70 @@ class DiffBench
   class Runner
     COLORS = {:red => 31, :green => 32, :yellow => 33}
 
-    def initialize(file, *args)
-      @file = file
-      unless @file
-        raise Error, "File not specified"
+    def initialize(*args)
+      opts = OptionParser.new do |opts|
+        opts.banner = <<-DOC
+Usage: diffbench [options] file
+
+When working tree is dirty default is run benchmark againts dirty tree and clean tree.
+When working tree is clean default is run benchmark against current head and previous commit.
+DOC
+        
+        opts.on("-r", '--revision [REVISIONS]', 'Specify revisions to run benchmark (comma separated). Example: master,f9a845,v3.1.4') do |value|
+          #if tree_dirty?
+            #raise Error, "Working tree is dirty."
+          #end
+          @revisions = value.split(",")
+        end
+
+        opts.on_tail('--help', 'Show this help') do
+          output opts
+          exit
+        end
       end
+      opts.parse!(args)
+      @file = args.first or raise Error, 'File not specified'
     end
 
     def run
+      if @revisions
+        run_revisions
+      else
+        run_current_head
+      end
+    end
+
+    def run_revisions
+      branch = current_head
+      
+      results = begin
+        @revisions.inject({}) do |result, revision|
+          output "Checkout to #{revision}"
+          output "Run benchmark with #{revision}"
+          result[revision] = run_file
+          result
+        end
+      ensure
+        output "Checkout to #{branch}"
+        git_run("checkout '#{branch}'")
+      end
+      output ""
+      caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
+      output caption
+      tests = results.values.first.keys
+      tests.each do |test|
+        output(("-" * (caption.size - test.size)) + test)
+        results.each do |revision, benchmark|
+          output "#{revision}: #{benchmark[test].format}"
+        end
+        #improvement = improvement_percentage(before_patch, after_patch)
+        #color_string = result_color(improvement)
+        #output self.class.color("Improvement: #{improvement}%", color_string).strip
+        output ""
+      end
+    end
+
+    def run_current_head
       output "Running benchmark with current working tree"
       first_run = run_file
       if tree_dirty?

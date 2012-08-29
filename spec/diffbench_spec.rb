@@ -86,7 +86,33 @@ Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
 #{DiffBench::Runner.color("Improvement: 50%", :green)}
 OUT
       end
+
+      it "should run benchmark for specified revisions" do
+        revs = `cd #{repo};git log --pretty="%h"`.split("\n")
+        output = `cd #{repo}; ./../../bin/diffbench -r #{revs.join(",")} bench.rb`
+        output.should =~ to_regexp(<<-OUT)
+Checkout to #{revs.first}
+Run benchmark with #{revs.first}
+--> Sleeping
+--> Sleeping
+Checkout to #{revs.last}
+Run benchmark with #{revs.last}
+--> Sleeping
+--> Sleeping
+Checkout to master
+
+                    user     system      total        real
+--------------------------------------------------Sleeper 1
+#{revs.first}:   0.000000   0.000000   0.000000 (  0.100NUM)
+#{revs.last }:   0.000000   0.000000   0.000000 (  0.100NUM)
+
+--------------------------------------------------Sleeper 2
+#{revs.first}:   0.000000   0.000000   0.000000 (  0.100NUM)
+#{revs.last }:   0.000000   0.000000   0.000000 (  0.100NUM)
+OUT
+      end
     end
+
   end
 
   
