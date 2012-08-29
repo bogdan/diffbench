@@ -47,7 +47,7 @@ class DiffBench
       caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
       output caption
       first_run.keys.each do |test|
-        output ("-"* (caption.size - test.size)) + test
+        output(("-" * (caption.size - test.size)) + test)
         before_patch = second_run[test]
         after_patch = first_run[test]
         improvement = improvement_percentage(before_patch, after_patch)
