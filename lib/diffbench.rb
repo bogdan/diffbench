@@ -21,11 +21,15 @@ When working tree is clean default is run benchmark against current head and pre
 DOC
         
         opts.on("-r", '--revision [REVISIONS]', 'Specify revisions to run benchmark (comma separated). Example: master,f9a845,v3.1.4') do |value|
-          #if tree_dirty?
-            #raise Error, "Working tree is dirty."
-          #end
+          if tree_dirty?
+            raise Error, "Working tree is dirty."
+          end
           @revisions = value.split(",")
         end
+        opts.on("-b", '--before [COMMAND]', 'Specify command to run before each benchmark run. e.g. bundle install') do |value|
+          @before_command = value
+        end
+
 
         opts.on_tail('--help', 'Show this help') do
           output opts
@@ -51,6 +55,7 @@ DOC
         @revisions.inject({}) do |result, revision|
           output "Checkout to #{revision}"
           output "Run benchmark with #{revision}"
+          git_run("checkout '#{revision}'")
           result[revision] = run_file
           result
         end
@@ -59,6 +64,7 @@ DOC
         git_run("checkout '#{branch}'")
       end
       output ""
+      #TODO set caption the right way
       caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
       output caption
       tests = results.values.first.keys
@@ -67,6 +73,7 @@ DOC
         results.each do |revision, benchmark|
           output "#{revision}: #{benchmark[test].format}"
         end
+        #TODO set improvement
         #improvement = improvement_percentage(before_patch, after_patch)
         #color_string = result_color(improvement)
         #output self.class.color("Improvement: #{improvement}%", color_string).strip
@@ -150,6 +157,7 @@ DOC
     end
 
     def run_file
+      output `#{@before_command}` if @before_command
       output = `ruby -I#{File.dirname(__FILE__)} #{@file}`
       output.split("\n").select! do |line|
         if line.start_with?("diffbench:")

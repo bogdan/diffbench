@@ -55,6 +55,11 @@ Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
 OUT
     end
 
+    it "should suppor before command option" do
+      output =  `cd #{repo}; ./../../bin/diffbench -b "echo hello" bench.rb`
+      output.should include("hello")
+    end
+
     describe "when changes got commit" do
 
       before(:each) do
@@ -104,11 +109,11 @@ Checkout to master
                     user     system      total        real
 --------------------------------------------------Sleeper 1
 #{revs.first}:   0.000000   0.000000   0.000000 (  0.100NUM)
-#{revs.last }:   0.000000   0.000000   0.000000 (  0.100NUM)
+#{revs.last }:   0.000000   0.000000   0.000000 (  0.200NUM)
 
 --------------------------------------------------Sleeper 2
 #{revs.first}:   0.000000   0.000000   0.000000 (  0.100NUM)
-#{revs.last }:   0.000000   0.000000   0.000000 (  0.100NUM)
+#{revs.last }:   0.000000   0.000000   0.000000 (  0.200NUM)
 OUT
       end
     end
