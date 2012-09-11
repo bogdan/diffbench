@@ -8,7 +8,7 @@ class DiffBench
         instance_eval(&block)
       end
 
-      print Encoder.encode(@measures)
+      puts Encoder.encode(@measures)
     end
 
     def report(label)

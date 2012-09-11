@@ -63,6 +63,10 @@ DOC
         output "Checkout to #{branch}"
         git_run("checkout '#{branch}'")
       end
+      print_results(results)
+    end
+
+    def print_results(results)
       output ""
       #TODO set caption the right way
       caption = "Before patch: ".gsub(/./, " ") +  Benchmark::Tms::CAPTION
