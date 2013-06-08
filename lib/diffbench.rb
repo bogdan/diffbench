@@ -12,7 +12,7 @@ class DiffBench
     COLORS = {:red => 31, :green => 32, :yellow => 33}
 
     def initialize(*args)
-      opts = OptionParser.new do |opts|
+      parser = OptionParser.new do |opts|
         opts.banner = <<-DOC
 Usage: diffbench [options] file
 
@@ -30,13 +30,12 @@ DOC
           @before_command = value
         end
 
-
-        opts.on_tail('--help', 'Show this help') do
+        opts.on_tail('-h', '--help', 'Show this help') do
           output opts
           exit
         end
       end
-      opts.parse!(args)
+      parser.parse!(args)
       @file = args.first or raise Error, 'File not specified'
     end
 
