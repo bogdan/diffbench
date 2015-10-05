@@ -7,6 +7,10 @@ describe DiffBench do
     Regexp.compile(Regexp.escape(output).gsub("NUM", "[0-9]+")) 
   end
 
+  def improvement_expression
+    DiffBench::Runner.color("Improvement: NUM%", :green)
+  end
+
   let(:repo) do
     "#{File.dirname(__FILE__)}/repo"
   end
@@ -44,14 +48,14 @@ Applying stashed changes back
 
                     user     system      total        real
 --------------------------------------------------Sleeper 1
-After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
-#{DiffBench::Runner.color("Improvement: 50%", :green)}
+After patch:    0.000000   0.000000   0.000000 (  0.10NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.20NUM)
+#{improvement_expression}
 
 --------------------------------------------------Sleeper 2
-After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
-#{DiffBench::Runner.color("Improvement: 50%", :green)}
+After patch:    0.000000   0.000000   0.000000 (  0.10NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.20NUM)
+#{improvement_expression}
 OUT
     end
 
@@ -81,19 +85,19 @@ Checkout to previous HEAD again
 
                     user     system      total        real
 --------------------------------------------------Sleeper 1
-After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
-#{DiffBench::Runner.color("Improvement: 50%", :green)}
+After patch:    0.000000   0.000000   0.000000 (  0.10NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.20NUM)
+#{improvement_expression}
 
 --------------------------------------------------Sleeper 2
-After patch:    0.000000   0.000000   0.000000 (  0.100NUM)
-Before patch:   0.000000   0.000000   0.000000 (  0.200NUM)
-#{DiffBench::Runner.color("Improvement: 50%", :green)}
+After patch:    0.000000   0.000000   0.000000 (  0.10NUM)
+Before patch:   0.000000   0.000000   0.000000 (  0.20NUM)
+#{improvement_expression}
 OUT
       end
 
       it "should run benchmark for specified revisions" do
-        revs = `cd #{repo};git log --pretty="%h"`.split("\n")
+        revs = `cd #{repo};git log --pretty="%h"`.split("\n").reverse
         output = `cd #{repo}; ./../../bin/diffbench -r #{revs.join(",")} bench.rb`
         output.should =~ to_regexp(<<-OUT)
 Checkout to #{revs.first}
@@ -108,12 +112,14 @@ Checkout to master
 
                     user     system      total        real
 --------------------------------------------------Sleeper 1
-#{revs.first}:   0.000000   0.000000   0.000000 (  0.100NUM)
-#{revs.last }:   0.000000   0.000000   0.000000 (  0.200NUM)
+#{revs.first}:   0.000000   0.000000   0.000000 (  0.10NUM)
+#{revs.last }:   0.000000   0.000000   0.000000 (  0.20NUM)
+#{improvement_expression}
 
 --------------------------------------------------Sleeper 2
-#{revs.first}:   0.000000   0.000000   0.000000 (  0.100NUM)
-#{revs.last }:   0.000000   0.000000   0.000000 (  0.200NUM)
+#{revs.first}:   0.000000   0.000000   0.000000 (  0.10NUM)
+#{revs.last }:   0.000000   0.000000   0.000000 (  0.20NUM)
+#{improvement_expression}
 OUT
       end
     end

@@ -76,10 +76,9 @@ DOC
         results.each do |revision, benchmark|
           output "#{revision}: #{benchmark[test].format}"
         end
-        #TODO set improvement
-        #improvement = improvement_percentage(before_patch, after_patch)
-        #color_string = result_color(improvement)
-        #output self.class.color("Improvement: #{improvement}%", color_string).strip
+        if results.size == 2
+          output_improvement(*results.values.map {|b| b[test]})
+        end
         output ""
       end
     end
@@ -117,13 +116,17 @@ DOC
         output(("-" * (caption.size - test.size)) + test)
         before_patch = second_run[test]
         after_patch = first_run[test]
-        improvement = improvement_percentage(before_patch, after_patch)
-        color_string = result_color(improvement)
         output "After patch:  #{after_patch.format}"
         output "Before patch: #{before_patch.format}"
-        output self.class.color("Improvement: #{improvement}%", color_string).strip
+        output_improvement(before_patch, after_patch)
         output ""
       end
+    end
+
+    def output_improvement(before, after)
+      improvement = improvement_percentage(before, after)
+      color_string = result_color(improvement)
+      output self.class.color("Improvement: #{improvement}%", color_string).strip
     end
 
     def improvement_percentage(before_patch, after_patch)
