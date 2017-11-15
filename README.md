@@ -1,4 +1,6 @@
 # Diffbench
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdiffbench.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdiffbench?ref=badge_shield)
+
 
 Diffbench is a tool I made during many performance patches to:
 
@@ -92,3 +94,7 @@ Like diffbench?
 Follow the [repository on GitHub](https://github.com/bogdan/diffbench).
 
 Read [author blog](http://gusiev.com).
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbogdan%2Fdiffbench.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbogdan%2Fdiffbench?ref=badge_large)
